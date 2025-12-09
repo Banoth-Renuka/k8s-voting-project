@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: results-app
+  namespace: voting-project
+  labels:
+    app: results
+spec:
+  containers:
+  - name: results-app
+    image: dockersamples/examplevotingapp_result:latest
+    ports:
+      - containerPort: 80
+    env:
+      - name: POSTGRES_HOST
+        value: "postgres.voting-project.svc.cluster.local"
+      - name: POSTGRES_PORT
+        value: "5432"
+      - name: POSTGRES_USER
+        valueFrom:
+          secretKeyRef:
+            name: postgres-secret
+            key: POSTGRES_USER
+      - name: POSTGRES_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: postgres-secret
+            key: POSTGRES_PASSWORD
